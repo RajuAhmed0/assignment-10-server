@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 
 const app = express();
@@ -34,6 +34,14 @@ async function run() {
             const result = await sportsCollections.find().toArray();
             res.send(result);
         });
+
+        app.get("/sports/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await sportsCollections.findOne(query)
+            res.send(result)
+        })
+
 
     } catch (error) {
         console.error("Error connecting to MongoDB:", error);
