@@ -61,10 +61,10 @@ async function run() {
         })
 
         // my equipment list
-        app.get("/myEquipment", async (req, res) => {
+     /*    app.get("/myEquipment", async (req, res) => {
             const result = await myEquipmentCollections.find().toArray();
             res.send(result);
-        });
+        }); */
 
 
         app.get("/myEquipment/:id", async (req, res) => {
@@ -74,12 +74,24 @@ async function run() {
             res.send(result)
         })
 
-        // Add new sports item
+
         app.post("/myEquipment", async (req, res) => {
             const data = req.body;
             const result = await myEquipmentCollections.insertOne(data);
             res.send(result);
         });
+
+
+        app.get("/myEquipment", async (req, res) => {
+            const userEmail = req.query.email;
+            if (!userEmail) {
+                return res.status(400).json({ error: "User email is required" });
+            }
+        
+            const userEquipment = await myEquipmentCollections.find({ userEmail }).toArray();
+            res.json(userEquipment);
+        });
+
 
         // Update sports item
         app.put("/myEquipment/:id", async (req, res) => {
