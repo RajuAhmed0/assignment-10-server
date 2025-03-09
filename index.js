@@ -61,14 +61,11 @@ async function run() {
         })
 
         // my equipment list
-        app.get('/products/email/:userEmail', async (req, res) => {
-            const email = req.params.userEmail;
-            const filter = {
-                userEmail: email
-            };
-            const result = await myEquipmentCollections.find(filter).toArray();
-            res.send(result)
-        })
+        app.get("/myEquipment", async (req, res) => {
+            const result = await myEquipmentCollections.find().toArray();
+            res.send(result);
+        });
+
 
         app.get("/myEquipment/:id", async (req, res) => {
             const id = req.params.id;
