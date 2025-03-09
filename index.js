@@ -29,13 +29,14 @@ async function run() {
         // Database & Collection
         const sportsCollections = client.db("sports_store").collection("sports");
         const equipmentCollections = client.db("sports_store").collection("equipment");
+        const myEquipmentCollections = client.db("sports_store").collection("myEquipment");
 
         // Get all sports items
         app.get("/sports", async (req, res) => {
             const result = await sportsCollections.find().toArray();
             res.send(result);
         });
-   
+
 
         app.get("/sports/:id", async (req, res) => {
             const id = req.params.id;
@@ -58,7 +59,44 @@ async function run() {
         })
 
 
-        
+        app.get("/myEquipment", async (req, res) => {
+            const result = await myEquipmentCollections.find().toArray();
+            res.send(result);
+        });
+
+
+        app.get("/myEquipment/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await myEquipmentCollections.findOne(query)
+            res.send(result)
+        })
+
+        // Add new sports item
+        app.post("/myEquipment", async (req, res) => {
+            const data = req.body;
+            const result = await myEquipmentCollections.insertOne(data);
+            res.send(result);
+        });
+
+        // Update sports item
+        app.put("/myEquipment/:id", async (req, res) => {
+            const id = req.params.id;
+            const updatedData = req.body;
+            const filter = { _id: new ObjectId(id) };
+            const updateDoc = { $set: updatedData };
+            const result = await myEquipmentCollections.updateOne(filter, updateDoc);
+            res.send(result);
+        });
+
+        // Delete sports item
+        app.delete("/myEquipment/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await myEquipmentCollections.deleteOne(query);
+            res.send(result);
+        });
+
 
     } catch (error) {
         console.error("Error connecting to MongoDB:", error);
