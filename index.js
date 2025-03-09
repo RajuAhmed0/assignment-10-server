@@ -24,16 +24,18 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // await client.connect();
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
         // Database & Collection
         const sportsCollections = client.db("sports_store").collection("sports");
+        const equipmentCollections = client.db("sports_store").collection("equipment");
 
         // Get all sports items
         app.get("/sports", async (req, res) => {
             const result = await sportsCollections.find().toArray();
             res.send(result);
         });
+   
 
         app.get("/sports/:id", async (req, res) => {
             const id = req.params.id;
@@ -42,6 +44,21 @@ async function run() {
             res.send(result)
         })
 
+        app.get("/equipment", async (req, res) => {
+            const result = await equipmentCollections.find().toArray();
+            res.send(result);
+        });
+
+
+        app.get("/equipment/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await equipmentCollections.findOne(query)
+            res.send(result)
+        })
+
+
+        
 
     } catch (error) {
         console.error("Error connecting to MongoDB:", error);
