@@ -45,6 +45,8 @@ async function run() {
             res.send(result)
         })
 
+
+        // all sports equipment
         app.get("/equipment", async (req, res) => {
             const result = await equipmentCollections.find().toArray();
             res.send(result);
@@ -58,7 +60,7 @@ async function run() {
             res.send(result)
         })
 
-
+        // my equipment list
         app.get("/myEquipment", async (req, res) => {
             const result = await myEquipmentCollections.find().toArray();
             res.send(result);
